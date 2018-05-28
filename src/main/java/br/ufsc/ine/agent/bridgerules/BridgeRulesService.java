@@ -1,13 +1,13 @@
 package br.ufsc.ine.agent.bridgerules;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.ufsc.ine.agent.context.beliefs.BeliefsContextService;
 import br.ufsc.ine.agent.context.communication.CommunicationContextService;
 import br.ufsc.ine.agent.context.desires.DesiresContextService;
 import br.ufsc.ine.agent.context.intentions.IntentionsContextService;
 import br.ufsc.ine.agent.context.plans.PlansContextService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BridgeRulesService {
 
@@ -31,12 +31,7 @@ public class BridgeRulesService {
 	public List<BridgeRule> bridgeRules() {
 
 		Body body = Body.builder().context(communicationContext).clause("sense(X)").build();
-		Body plan = Body.builder().context(plansContext).clause("plan(Y,_,Z,_)").build();
-		Body planMember = Body.builder().context(plansContext).clause("member(X, Z)").build();
-		Body desires = Body.builder().context(desiresContext).clause("Y").build();
-		body.setAnd(plan);
-		plan.setAnd(planMember);
-		planMember.setAnd(desires);
+		 
 		BridgeRule r1 = BridgeRule.builder().head(Head.builder().context(beliefsContext).clause("X").build()).body(body)
 				.build();
 		r1.execute();
