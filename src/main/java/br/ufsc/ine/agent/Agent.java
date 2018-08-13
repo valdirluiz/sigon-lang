@@ -6,6 +6,7 @@ import br.ufsc.ine.agent.context.communication.CommunicationContextService;
 import br.ufsc.ine.agent.context.LangContext;
 import br.ufsc.ine.agent.context.beliefs.BeliefsContextService;
 import br.ufsc.ine.agent.context.desires.DesiresContextService;
+import br.ufsc.ine.agent.context.intentions.IntentionsContextService;
 import br.ufsc.ine.agent.context.plans.PlansContextService;
 import br.ufsc.ine.parser.AgentWalker;
 import br.ufsc.ine.agent.context.communication.Sensor;
@@ -25,6 +26,7 @@ public class Agent {
 
 	private static final String DESIRES = "desires";
 	private static final String BELIEFS = "beliefs";
+	private static final String INTENTIONS = "intentions";
 	private List<Sensor> sensors = new ArrayList<>();
 	private List<Actuator> actuators = new ArrayList<>();
 	private String profilingFile;
@@ -92,6 +94,7 @@ public class Agent {
 
 		List<LangContext> desires = getContext(walker, DESIRES);
 		List<LangContext> beliefs = getContext(walker, BELIEFS);
+		List<LangContext> intentions = getContext(walker, INTENTIONS);
 
 		walker.getLangActuators().forEach(a -> {
 			try {
@@ -121,6 +124,7 @@ public class Agent {
 
 		BeliefsContextService.getInstance().beliefs(beliefs);
 		DesiresContextService.getInstance().desires(desires);
+		IntentionsContextService.getInstance().checkIntentions(intentions);
 		PlansContextService.getInstance().plans(walker.getPlans());
 		PlansContextService.getInstance().plansClauses(walker.getPlansClauses());
 	}

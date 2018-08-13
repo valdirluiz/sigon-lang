@@ -176,12 +176,16 @@ body
 
 
 term
-	:  negation? constant ('(' (atom) (',' (atom) )* (')' | ').') annotation?)?
+	:  negation? constant ( ('.') | ('(' (atom) (',' (atom) )* (')' | ').') annotation?))?
 	| term (AND | OR) term
 	| ('[' term (',' term)* ']')
 	| term ':-' term
 	;
 
+ 
+folClause
+	: negation? constant '(' (term) (',' (term) )* ')' (annotation)?
+;
 
 
 formulas

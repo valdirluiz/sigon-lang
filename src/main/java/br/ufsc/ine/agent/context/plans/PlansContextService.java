@@ -81,6 +81,9 @@ public class PlansContextService implements ContextService{
     }
 
 	private boolean checkPreConditions(Plan p) {
+		if(p.getPreConditions().isEmpty()) {
+			return true;
+		}
 		boolean check = false;
 		for(String clause : p.getPreConditions()){
 
