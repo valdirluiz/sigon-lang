@@ -26,6 +26,7 @@ public class Body {
     private List<String> variableFacts = new ArrayList<>();
 
     public boolean verify(){
+    	boolean success = false;
         try {
             Theory contextTheory = defineBodyTheory();
             Prolog prolog = new Prolog();
@@ -58,26 +59,27 @@ public class Body {
                         }
 
                         variableFacts.add(head.getClause().substring(0, head.getClause().indexOf("(")+1)+builder+").");
-                        return solve.isSuccess();
+                        success =  solve.isSuccess();
+                        return success;
                     }
 
 
-                    Term solution = solve.getTerm(this.head.getTerm());
-                    if (solution.toString().contains("|")) {
-                        String[] result = solution.toString().substring(1, solution.toString().length() - 1).split("\\|");
-                        for (String s : result) {
-                            String item = s.replaceAll("_([0-9])*", "_") + ".";
-                            variableFacts.add(item);
-                        }
-                    } else {
-                        variableFacts.add(solution.toString().replaceAll("_([0-9])*", "_")+ ".");
+
+                    while(solve.isSuccess()) {
+                    	Term solution = solve.getTerm(this.head.getTerm());
+                    	variableFacts.add(solution.toString().replaceAll("_([0-9])*", "_")+ ".");
+                        solve = prolog.solveNext();
+                        success = true;
                     }
+                    
+                    
+                  
                 }
             } catch (Exception e){
 
             }
 
-            return solve.isSuccess();
+            return success;
         }  catch (Exception e){
             e.printStackTrace();
             return false;
@@ -85,11 +87,24 @@ public class Body {
     }
 
 
+	private void addToResult(Term solution) {
+		if (solution.toString().contains("|")) {
+		    String[] result = solution.toString().substring(1, solution.toString().length() - 1).split("\\|");
+		    for (String s : result) {
+		        String item = s.replaceAll("_([0-9])*", "_") + ".";
+		        variableFacts.add(item);
+		    }
+		} else {
+		    variableFacts.add(solution.toString().replaceAll("_([0-9])*", "_")+ ".");
+		}
+	}
+
+
     private Theory defineBodyTheory() throws InvalidTheoryException {
 
         StringBuilder builder = new StringBuilder();
         String[] contextSplit = context.getTheory().toString()
-                //.replaceAll("_([0-9])*", "_").trim()
+                .replaceAll("_([0-9])*", "_").trim()
                 .replaceAll("\\n\\n", "/")
                 .split("/");
 
@@ -256,5 +271,10 @@ public class Body {
 
     public void setHead(Head head) {
         this.head = head;
+    }
+    
+    public Body and(Body and) {
+        this.and = and;
+        return this;
     }
 }

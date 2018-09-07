@@ -13,7 +13,7 @@ public class CustomContext  implements ContextService {
     private PrologEnvironment prologEnvironment;
 
     public CustomContext(String name){
-        this.name = name;
+        this.name = name.toLowerCase();
         prologEnvironment = new PrologEnvironment();
     }
 
