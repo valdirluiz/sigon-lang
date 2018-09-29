@@ -45,10 +45,11 @@ public class CommunicationContextService implements ContextService{
                 prologEnvironment = new PrologEnvironment();
                 prologEnvironment.appendFact(fact);
             } else {
-                String name = fact.substring(0, fact.length() -1);
+               
+         
 
                 Actuator actuator = actuators.stream()
-                        .filter(a -> a.getName().equals(name))
+                        .filter(a -> a.getName().equals(fact))
                         .findFirst().get();
 
                 //TODO: passar parametros para funcoes

@@ -31,12 +31,14 @@ public class BridgeRulesService {
 	public List<BridgeRule> bridgeRules() {
 
 		Body body = Body.builder().context(communicationContext).clause("sense(X)").build();
-		//Body plan = Body.builder().context(plansContext).clause("plan(Y,_,Z,_)").build();
-		//Body planMember = Body.builder().context(plansContext).clause("member(X, Z)").build();
-		//Body desires = Body.builder().context(desiresContext).clause("Y").build();
-		//body.setAnd(plan);
-	//	plan.setAnd(planMember);
-		//planMember.setAnd(desires);
+		// Body plan =
+		// Body.builder().context(plansContext).clause("plan(Y,_,Z,_)").build();
+		// Body planMember = Body.builder().context(plansContext).clause("member(X,
+		// Z)").build();
+		// Body desires = Body.builder().context(desiresContext).clause("Y").build();
+		// body.setAnd(plan);
+		// plan.setAnd(planMember);
+		// planMember.setAnd(desires);
 		BridgeRule r1 = BridgeRule.builder().head(Head.builder().context(beliefsContext).clause("X").build()).body(body)
 				.build();
 		r1.execute();
@@ -55,15 +57,30 @@ public class BridgeRulesService {
 	public void executeBdiRules() {
 
 		Body body = Body.builder().context(communicationContext).clause("sense(X)").build();
-		//Body plan = Body.builder().context(plansContext).clause("plan(Y,_,Z,_)").build();
-		//Body planMember = Body.builder().context(plansContext).clause("member(X, Z)").build();
-		//Body desires = Body.builder().context(desiresContext).clause("Y").build();
-		//body.setAnd(plan);
-		//plan.setAnd(planMember);
-		//planMember.setAnd(desires);
+		// Body plan =
+		// Body.builder().context(plansContext).clause("plan(Y,_,Z,_)").build();
+		// Body planMember = Body.builder().context(plansContext).clause("member(X,
+		// Z)").build();
+		// Body desires = Body.builder().context(desiresContext).clause("Y").build();
+		// body.setAnd(plan);
+		// plan.setAnd(planMember);
+		// planMember.setAnd(desires);
 		BridgeRule r1 = BridgeRule.builder().head(Head.builder().context(beliefsContext).clause("X").build()).body(body)
 				.build();
 		r1.execute();
+
+	}
+
+	public static void main(String[] args) {
+		Body body = Body.builder().context(CommunicationContextService.getInstance()).clause("sense(X)").build();
+
+		CommunicationContextService.getInstance().appendFact("sense(teste).");
+		BridgeRule r1 = BridgeRule.builder()
+				.head(Head.builder().context(BeliefsContextService.getInstance()).clause("X").build()).body(body)
+				.build();
+		r1.execute();
+		
+		System.out.println(BeliefsContextService.getInstance().getTheory().toString());
 
 	}
 }

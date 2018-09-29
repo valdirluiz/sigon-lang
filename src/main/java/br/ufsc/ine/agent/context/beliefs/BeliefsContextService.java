@@ -112,11 +112,12 @@ public class BeliefsContextService implements ContextService {
 				}
 			}
 
-			if(update){
-				prologEnvironment.updateFact(c, toTest);
-			} else {
-				prologEnvironment.appendFact(c);
-			}
+//			if(update){
+//				prologEnvironment.updateFact(c, toTest);
+//			} else {
+//				prologEnvironment.appendFact(c);
+//			}
+			prologEnvironment.appendFact(c);
 		} catch (InvalidTheoryException e) {
 			e.printStackTrace();
 		}

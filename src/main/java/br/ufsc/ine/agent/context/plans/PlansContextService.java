@@ -43,11 +43,12 @@ public class PlansContextService implements ContextService{
 
 	private boolean hasBelief(String clause){
 
-		return Body.builder()
+		boolean has  =  Body.builder()
 				.head(Head.builder().clause(clause).build())
 				.context(BeliefsContextService.getInstance())
 				.clause(clause).build()
 				.verify();
+		return has;
 	}
 
     public void executePlanAlgorithm() {
@@ -56,7 +57,8 @@ public class PlansContextService implements ContextService{
 
 
 		Optional<Plan> plan = plans.stream()
-				.filter(p -> !this.hasBelief(p.getSomethingToBeTrue()) && checkPreConditions(p))
+				.filter( p -> !this.hasBelief(p.getSomethingToBeTrue()))
+				.filter(p -> this.checkPreConditions(p))
 				.findFirst();
 
 		if(plan.isPresent()) {
@@ -68,17 +70,26 @@ public class PlansContextService implements ContextService{
 			if (any.isPresent()) {
 
 				// TODO: 3/3/18 add argumentos da funcao
-				this.appendFact("act(" + any.get().getName() + ").");
-
-				BridgeRule.builder()
-						.head(Head.builder().context(CommunicationContextService.getInstance()).clause("X").build())
-						.body(Body.builder().context(getInstance()).clause("act(X)").build()).build()
-						.execute();
+				String act = "act(" + any.get().getName() + ").";
+				this.appendFact(act);
+				
+				CommunicationContextService.getInstance().appendFact(any.get().getName());
+				
+//TODO: verificar com problema depois de commit felipe
+				
+//				BridgeRule.builder()
+//						.head(Head.builder().context(CommunicationContextService.getInstance()).clause("X").build())
+//						.body(Body.builder().context(getInstance()).clause("act(X)").build()).build()
+//						.execute();
 
 			}
 		}
 		
     }
+
+	private Predicate<? super Plan> filtraPlanos() {
+		return p -> !this.hasBelief(p.getSomethingToBeTrue()) && checkPreConditions(p);
+	}
 
 	private boolean checkPreConditions(Plan p) {
 		if(p.getPreConditions().isEmpty()) {

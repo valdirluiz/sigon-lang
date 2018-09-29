@@ -68,8 +68,12 @@ public class Body {
                     while(solve.isSuccess()) {
                     	Term solution = solve.getTerm(this.head.getTerm());
                     	variableFacts.add(solution.toString().replaceAll("_([0-9])*", "_")+ ".");
+                    	 if(!success) {
+                         	success = true;
+                         }
                         solve = prolog.solveNext();
-                        success = true;
+                       
+                        
                     }
                     
                     
